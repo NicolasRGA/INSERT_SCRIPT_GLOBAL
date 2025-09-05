@@ -1,2 +1,1129 @@
-<h1>Documentação do Projeto</h1>
-<p>Bem-vindo! Aqui está a documentação do INSERT_SCRIPT_GLOBAL.</p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema ETL - Ação Social | Documentação</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-accent: #f1f5f9;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+            background: var(--bg-accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(30, 64, 175, 0.9));
+            color: white;
+            padding: 8rem 0 4rem;
+            margin-top: 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Main Content */
+        main {
+            background: var(--bg-primary);
+            padding: 4rem 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 120px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        /* Content */
+        .content {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 120px;
+        }
+
+        .section h2 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .section h3 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+        }
+
+        .section h4 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card ul {
+            list-style: none;
+        }
+
+        .feature-card li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: var(--bg-accent);
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-primary);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-accent);
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--text-primary);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: var(--primary-color);
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: var(--warning-color);
+            color: #92400e;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            border-color: var(--error-color);
+            color: #b91c1c;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: var(--success-color);
+            color: #065f46;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .footer-section p, .footer-section li {
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 2rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav ul {
+                display: none;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">ETL</div>
+                    Sistema ETL - Ação Social
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#overview" class="active">Visão Geral</a></li>
+                        <li><a href="#architecture">Arquitetura</a></li>
+                        <li><a href="#user-guide">Guia do Usuário</a></li>
+                        <li><a href="#admin-guide">Administrador</a></li>
+                        <li><a href="#troubleshooting">Suporte</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="version-badge">
+                    📊 Versão 1.0 - Setembro 2025
+                </div>
+                <h1>Sistema ETL<br>Ação Social</h1>
+                <p>Sistema completo de registro de presença com governança de dados para organizações sociais</p>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <div class="content-grid">
+                <aside class="sidebar">
+                    <h3>Navegação</h3>
+                    <ul>
+                        <li><a href="#overview">Visão Geral</a></li>
+                        <li><a href="#features">Características</a></li>
+                        <li><a href="#numbers">Números</a></li>
+                        <li><a href="#architecture">Arquitetura</a></li>
+                        <li><a href="#components">Componentes</a></li>
+                        <li><a href="#data-flow">Fluxo de Dados</a></li>
+                        <li><a href="#user-guide">Guia do Usuário</a></li>
+                        <li><a href="#admin-guide">Administrador</a></li>
+                        <li><a href="#troubleshooting">Problemas</a></li>
+                        <li><a href="#maintenance">Manutenção</a></li>
+                        <li><a href="#recovery">Recuperação</a></li>
+                        <li><a href="#glossary">Glossário</a></li>
+                    </ul>
+                </aside>
+
+                <div class="content">
+                    <section id="overview" class="section">
+                        <h2>Visão Geral do Sistema</h2>
+                        
+                        <p>O Sistema ETL de Ação Social é uma solução completa para registro automatizado de presença de crianças em atividades sociais. Desenvolvido especificamente para organizações que operam com voluntários, o sistema combina simplicidade de uso com robustez empresarial.</p>
+
+                        <div id="features">
+                            <h3>Características Principais</h3>
+                            <div class="feature-grid">
+                                <div class="feature-card">
+                                    <h4>Para Usuários Finais</h4>
+                                    <ul>
+                                        <li>Interface simples via Google Forms</li>
+                                        <li>Seleção dinâmica de crianças por localidade</li>
+                                        <li>Cadastro rápido de novos participantes</li>
+                                        <li>Validação automática de dados</li>
+                                    </ul>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>Para Administradores</h4>
+                                    <ul>
+                                        <li>Painel completo de ferramentas administrativas</li>
+                                        <li>Detecção automática de duplicatas</li>
+                                        <li>Sistema de correção e reprocessamento</li>
+                                        <li>Trilha de auditoria completa</li>
+                                        <li>Backups automáticos</li>
+                                    </ul>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>Características Técnicas</h4>
+                                    <ul>
+                                        <li>Modelo dimensional (Star Schema)</li>
+                                        <li>Proteção contra concorrência</li>
+                                        <li>Cache otimizado para performance</li>
+                                        <li>Rastreamento completo de alterações</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="numbers">
+                            <h3>Números Suportados</h3>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <span class="stat-number">2.000</span>
+                                    <span class="stat-label">Crianças Ativas</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-number">150</span>
+                                    <span class="stat-label">Submissões/Dia</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-number">15</span>
+                                    <span class="stat-label">Usuários Simultâneos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="architecture" class="section">
+                        <h2>Arquitetura e Componentes</h2>
+
+                        <div id="components">
+                            <h3>Componentes do Sistema</h3>
+                            <div class="architecture-diagram">
+                                ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐<br>
+                                │   Google Form   │───►│  Apps Script    │───►│ Google Sheets   │<br>
+                                │  (Interface)    │    │   (Processador  │    │  (Data Warehouse│<br>
+                                │                 │    │    ETL)         │    │   + Auditoria)  │<br>
+                                └─────────────────┘    └─────────────────┘    └─────────────────┘
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3>Estrutura das Abas (Data Warehouse)</h3>
+                            
+                            <h4>BASE_BRUTA (Staging Area)</h4>
+                            <p>Recebe dados brutos do formulário sem processamento.</p>
+                            
+                            <div class="alert alert-info">
+                                <strong>Colunas principais:</strong> Carimbo de data/hora, Local do INSERT, Seleção da criança por bairro, Dados de nova criança (quando aplicável)
+                            </div>
+
+                            <h4>Dimensões</h4>
+                            
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Dimensão</th>
+                                            <th>Descrição</th>
+                                            <th>Estrutura Principal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>"Valor não encontrado na dimensão"</td>
+                                        <td>Referência quebrada entre dimensões</td>
+                                        <td>Verificar se o valor existe na dimensão correspondente</td>
+                                    </tr>
+                                    <tr>
+                                        <td>"Criança não encontrada"</td>
+                                        <td>Criança removida ou corrupção de dados</td>
+                                        <td>Recriar registro ou usar ferramenta de correção</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Operações lentas (> 30s)</td>
+                                        <td>Muitos dados ou operações simultâneas</td>
+                                        <td>Evitar uso simultâneo, arquivar dados antigos</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="maintenance" class="section">
+                        <h2>Manutenção e Monitoramento</h2>
+                        
+                        <h3>Rotinas de Manutenção</h3>
+                        
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h4>📅 Diária</h4>
+                                <ul>
+                                    <li>Verificar logs de erro no Google Apps Script</li>
+                                    <li>Monitorar tempo de resposta das operações</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <h4>📊 Semanal</h4>
+                                <ul>
+                                    <li>Executar detector de duplicatas</li>
+                                    <li>Revisar log de auditoria</li>
+                                    <li>Verificar backups criados</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <h4>🔄 Mensal</h4>
+                                <ul>
+                                    <li>Atualizar listas do formulário</li>
+                                    <li>Análise de dados órfãos</li>
+                                    <li>Limpeza de cache</li>
+                                </ul>
+                            </div>
+
+                            <div class="feature-card">
+                                <h4>📈 Trimestral</h4>
+                                <ul>
+                                    <li>Arquivamento de dados antigos</li>
+                                    <li>Revisão de performance</li>
+                                    <li>Treinamento de novos administradores</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3>Métricas de Saúde</h3>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <span class="stat-number">< 2%</span>
+                                <span class="stat-label">Taxa de Duplicatas</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-number">0</span>
+                                <span class="stat-label">Registros Órfãos</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-number">< 5s</span>
+                                <span class="stat-label">Submissão Formulário</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-number">> 99.5%</span>
+                                <span class="stat-label">Disponibilidade</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="recovery" class="section">
+                        <h2>Cenários de Recuperação</h2>
+                        
+                        <h3>Recuperação de Backup</h3>
+                        
+                        <div class="alert alert-error">
+                            <strong>Cenário: Operação administrativa corrompeu dados</strong><br>
+                            <strong>Detecção:</strong> Dados inconsistentes, registros desapareceram, referências quebradas
+                        </div>
+
+                        <h4>Processo de Recuperação:</h4>
+                        <ol>
+                            <li><strong>Identifique o backup:</strong> Pasta "Backups - Planilha Ação Social"</li>
+                            <li><strong>Localize a versão:</strong> Backup com timestamp anterior ao problema</li>
+                            <li><strong>Restaure dados:</strong> Copie abas específicas ou planilha completa</li>
+                            <li><strong>Valide integridade:</strong> Execute verificações básicas</li>
+                            <li><strong>Documente:</strong> Registre causa e ações tomadas</li>
+                        </ol>
+
+                        <div class="alert alert-warning">
+                            <strong>Cenário de Emergência: Planilha principal deletada</strong><br>
+                            1. Verificar Google Drive Lixeira<br>
+                            2. Usar backup mais recente<br>
+                            3. Reconectar formulário à nova planilha<br>
+                            4. Validar todas as funcionalidades
+                        </div>
+
+                        <h3>Recuperação de Dados Específicos</h3>
+                        
+                        <div class="code-block">
+Exemplo - Criança deletada por engano:
+1. Identificar dados: Nome, ID, data aproximada
+2. Localizar backup anterior à deleção  
+3. Extrair linha da DIM_CRIANCA
+4. Recriar manualmente na posição correta
+5. Verificar histórico na FAT_GLOBAL
+                        </div>
+                    </section>
+
+                    <section id="glossary" class="section">
+                        <h2>Glossário Técnico</h2>
+                        
+                        <h3>Termos do Sistema</h3>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Termo</th>
+                                        <th>Definição</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>BASE_BRUTA</strong></td>
+                                        <td>Staging area que recebe dados brutos do formulário antes do processamento ETL</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CARIMBO_FONTE</strong></td>
+                                        <td>Chave única composta por timestamp + sufixo aleatório que permite rastreamento completo</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DIM (Dimensão)</strong></td>
+                                        <td>Tabelas que contêm atributos descritivos para análise (criança, bairro, data, faixa etária)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ETL</strong></td>
+                                        <td>Extract, Transform, Load - processo de extração, transformação e carregamento de dados</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>FAT_GLOBAL</strong></td>
+                                        <td>Tabela fato que armazena eventos de presença com referências para as dimensões</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>LockService</strong></td>
+                                        <td>Mecanismo que previne execução simultânea de operações críticas</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Star Schema</strong></td>
+                                        <td>Modelo dimensional com tabela fato central conectada a dimensões</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>Termos de Administração</h3>
+                        
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h4>Detector de Duplicatas</h4>
+                                <p>Algoritmo que usa distância de Levenshtein para identificar nomes similares com alta probabilidade de serem duplicatas.</p>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <h4>Log de Auditoria</h4>
+                                <p>Registro cronológico de todas as operações administrativas com detalhes para rastreabilidade.</p>
+                            </div>
+
+                            <div class="feature-card">
+                                <h4>Reprocessamento</h4>
+                                <p>Operação que apaga registros derivados de uma submissão e os reconstrói com dados corrigidos.</p>
+                            </div>
+
+                            <div class="feature-card">
+                                <h4>Unificação</h4>
+                                <p>Processo de merge de duas crianças duplicadas, transferindo histórico completo para um registro principal.</p>
+                            </div>
+                        </div>
+
+                        <h3>Códigos de Erro Comuns</h3>
+                        
+                        <div class="alert alert-error">
+                            <strong>"Sistema ocupado, tente novamente"</strong> → Lock timeout - múltiplos usuários simultâneos
+                        </div>
+                        
+                        <div class="alert alert-error">
+                            <strong>"Valor não encontrado na dimensão"</strong> → Referência quebrada entre tabelas
+                        </div>
+                        
+                        <div class="alert alert-error">
+                            <strong>"Criança não encontrada"</strong> → Nome não localizado na DIM_CRIANCA (problema de grafia)
+                        </div>
+                        
+                        <div class="alert alert-error">
+                            <strong>"Idade inválida"</strong> → Data de nascimento resulta em idade < 0 ou > 18 anos
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>📋 Sistema ETL</h4>
+                    <p>Sistema completo de registro de presença com governança de dados para organizações sociais.</p>
+                    <p><strong>Versão:</strong> 1.0 - Setembro 2025</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>🔧 Características</h4>
+                    <ul>
+                        <li>Interface via Google Forms</li>
+                        <li>Data Warehouse completo</li>
+                        <li>Ferramentas administrativas</li>
+                        <li>Sistema de auditoria</li>
+                        <li>Backups automáticos</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>📊 Capacidades</h4>
+                    <ul>
+                        <li>Até 2.000 crianças ativas</li>
+                        <li>Até 150 submissões/dia</li>
+                        <li>Até 15 usuários simultâneos</li>
+                        <li>Modelo dimensional (Star Schema)</li>
+                        <li>Proteção contra concorrência</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>🛠️ Suporte</h4>
+                    <p>Para dúvidas ou problemas não cobertos neste manual, contate o administrador do sistema.</p>
+                    <p><strong>Lembre-se:</strong> Sistema possui backup automático e trilha de auditoria completa.</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Sistema ETL - Ação Social. Desenvolvido para organizações sociais com Google Workspace.</p>
+                <p>🔒 Sistema seguro com proteção de dados e rastreamento completo de alterações.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling para links de navegação
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight da navegação ativa
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('nav a, .sidebar a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Animação de entrada para cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Aplicar animação aos cards
+        document.querySelectorAll('.feature-card, .stat-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
+                                        <tr>
+                                            <td>DIM_CRIANCA</td>
+                                            <td>Informações únicas de cada criança</td>
+                                            <td>ID, NOME, DATA_NASCIMENTO, GENERO, ID_BAIRRO, IDADE</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DIM_BAIRRO</td>
+                                            <td>Localidades atendidas</td>
+                                            <td>ID, BAIRRO</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DIM_DIA</td>
+                                            <td>Dimensão temporal</td>
+                                            <td>ID, DATA, DIA_SEMANA, MES, ANO</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DIM_FAIXA_ETARIA</td>
+                                            <td>Classificação por idade</td>
+                                            <td>ID, DESCRICAO, IDADE_MIN, IDADE_MAX</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h4>FAT_GLOBAL (Tabela Fato)</h4>
+                            <p>Registra cada evento de presença conectando todas as dimensões.</p>
+                            
+                            <div class="code-block">
+ID | ID_DIA | ID_CRIANCA | ID_BAIRRO | ID_FAIXA_ETARIA | CARIMBO_FONTE
+1  | 1      | 1          | 1         | 2               | 20241205_abc123
+                            </div>
+                        </div>
+
+                        <div id="data-flow">
+                            <h3>Fluxo de Dados (ETL)</h3>
+                            
+                            <div class="feature-grid">
+                                <div class="feature-card">
+                                    <h4>1. EXTRACT</h4>
+                                    <p>Dados do formulário → BASE_BRUTA</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>2. TRANSFORM</h4>
+                                    <p>Validação e padronização (MAIÚSCULO, datas)</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>3. LOAD</h4>
+                                    <p>População das dimensões e tabela fato</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4>4. CACHE</h4>
+                                    <p>Atualização das listas do formulário</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="user-guide" class="section">
+                        <h2>Guia do Usuário Final</h2>
+                        
+                        <h3>Acessando o Sistema</h3>
+                        <ol>
+                            <li>Acesse o link do formulário fornecido pela organização</li>
+                            <li>O formulário se adapta automaticamente ao bairro selecionado</li>
+                            <li>Todos os campos são obrigatórios</li>
+                        </ol>
+
+                        <h3>Registrando Presença de Criança Existente</h3>
+                        
+                        <div class="alert alert-info">
+                            <strong>Passo a Passo:</strong><br>
+                            1. <strong>Selecione o Local:</strong> Escolha entre "Jardim Indaia" ou "Jardim Miriam"<br>
+                            2. <strong>Selecione a Data:</strong> Use o campo de data (formato DD/MM/AAAA)<br>
+                            3. <strong>Escolha a Criança:</strong> Selecione da lista dropdown específica do bairro<br>
+                            4. <strong>Confirme:</strong> Clique em "Enviar"
+                        </div>
+
+                        <h3>Cadastrando Nova Criança</h3>
+                        
+                        <div class="code-block">
+Local: Jardim Miriam  
+Data: 05/12/2024
+Seleção: "Cadastrar nova criança"
+Nome: pedro santos (será salvo como PEDRO SANTOS)
+Nascimento: 15/08/2018
+Gênero: Masculino
+                        </div>
+
+                        <h3>Mensagens de Erro Comuns</h3>
+                        
+                        <div class="alert alert-error">
+                            <strong>"Erro de formulário inválido"</strong><br>
+                            Causa: Problemas de conectividade<br>
+                            Solução: Aguarde alguns minutos e tente novamente
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <strong>"Sistema ocupado, tente novamente"</strong><br>
+                            Causa: Muitas pessoas usando simultaneamente<br>
+                            Solução: Aguarde 30 segundos e reenvie
+                        </div>
+                    </section>
+
+                    <section id="admin-guide" class="section">
+                        <h2>Manual do Administrador</h2>
+                        
+                        <h3>Acessando as Ferramentas</h3>
+                        <ol>
+                            <li>Abra a planilha Google Sheets do sistema</li>
+                            <li>Localize o menu <strong>"FERRAMENTAS DE ADMIN"</strong> na barra superior</li>
+                            <li>Todas as operações administrativas estão neste menu</li>
+                        </ol>
+
+                        <h3>Ferramentas Disponíveis</h3>
+                        
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h4>ATUALIZAR LISTAS DE CRIANÇAS</h4>
+                                <p>Sincroniza as listas dropdown do formulário com a base atual de crianças.</p>
+                                <div class="alert alert-success">
+                                    <strong>Quando usar:</strong> Após cadastrar muitas crianças novas ou periodicamente (mensal)
+                                </div>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <h4>CORRIGIR E REPROCESSAR LINHA</h4>
+                                <p>Corrige erros em dados já submetidos e reconstrói todos os registros relacionados.</p>
+                                <div class="alert alert-warning">
+                                    <strong>Processo Seguro:</strong> Backup automático + Validação + Auditoria completa
+                                </div>
+                            </div>
+
+                            <div class="feature-card">
+                                <h4>DETECTAR DUPLICATAS</h4>
+                                <p>Identifica possíveis cadastros duplicados usando algoritmo de similaridade.</p>
+                                <div class="alert alert-info">
+                                    <strong>Algoritmo:</strong> Usa distância de Levenshtein (similaridade > 85%)
+                                </div>
+                            </div>
+
+                            <div class="feature-card">
+                                <h4>UNIFICAR CRIANÇAS DUPLICADAS</h4>
+                                <p>Mescla dois registros de crianças, mantendo apenas um e transferindo todo o histórico.</p>
+                                <div class="alert alert-error">
+                                    <strong>Atenção:</strong> Operação irreversível - sempre cria backup antes
+                                </div>
+                            </div>
+
+                            <div class="feature-card">
+                                <h4>VER LOG DE AUDITORIA</h4>
+                                <p>Exibe histórico completo de todas as operações administrativas.</p>
+                                <div class="alert alert-info">
+                                    <strong>Registra:</strong> Timestamp, usuário, ação e detalhes em JSON
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="troubleshooting" class="section">
+                        <h2>Solução de Problemas</h2>
+                        
+                        <h3>Problemas no Formulário</h3>
+                        
+                        <div class="alert alert-error">
+                            <strong>Erro: "Sistema ocupado, tente novamente"</strong><br>
+                            <strong>Causa:</strong> Múltiplos usuários submetendo dados simultaneamente<br>
+                            <strong>Solução:</strong> Aguarde 30-60 segundos e tente reenviar
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <strong>Erro: "Lista de crianças está vazia"</strong><br>
+                            <strong>Causa:</strong> Listas do formulário desatualizadas<br>
+                            <strong>Solução:</strong> Administrador deve usar "ATUALIZAR LISTAS DE CRIANÇAS"
+                        </div>
+
+                        <h3>Problemas na Planilha</h3>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Erro</th>
+                                        <th>Causa</th>
+                                        <th>Solução</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
